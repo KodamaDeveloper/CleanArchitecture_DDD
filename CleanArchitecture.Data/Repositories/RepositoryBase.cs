@@ -50,10 +50,10 @@ namespace CleanArchitecture.Infrastructure.Repositories
                 query = query.AsNoTracking();
 
             if (!string.IsNullOrWhiteSpace(includeString))
-                query= query.Include(includeString);
+                query = query.Include(includeString);
 
-            if (orderby != null)
-                return await orderby(query).ToListAsync();
+            if (predicate != null)
+                query = query.Where(predicate);
 
             return await query.ToListAsync();
         }
