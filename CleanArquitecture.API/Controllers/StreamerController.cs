@@ -1,4 +1,6 @@
 ﻿using CleanArchitecture.Application.Features.Streamers.Commands.CreateStreamer;
+using CleanArchitecture.Application.Features.Streamers.Commands.DeleteStreamer;
+using CleanArchitecture.Application.Features.Streamers.Commands.UpdateStreamer;
 using CleanArchitecture.Application.Features.Videos.Queries.GetVideosList;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +10,7 @@ namespace CleanArquitecture.API.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class StreamerController
+    public class StreamerController : ControllerBase
     {
         private readonly IMediator _mediator;
 
@@ -22,9 +24,34 @@ namespace CleanArquitecture.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<ActionResult<int>> CreateStremaer([FromBody] CreateStreamerCommand command)
         {
-
             return await _mediator.Send(command);
-  
         }
+
+        [HttpPut(Name = "UpdateStreamer")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<int>> UpdateStremaer([FromBody] UpdateStreamerCommand command)
+        {
+            await _mediator.Send(command);
+            return NoContent();
+        }
+
+        [HttpDelete("{id}", Name = "DeleteStreamer")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<int>> DeleteStremaer(int id)
+        {
+            var command = new DeleteStreamerCommand
+            {
+                Id = id
+            };
+
+            await _mediator.Send(command);
+            return NoContent();
+        }
+
+
     }
 }
