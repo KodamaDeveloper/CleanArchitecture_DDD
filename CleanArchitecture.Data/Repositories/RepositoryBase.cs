@@ -55,6 +55,9 @@ namespace CleanArchitecture.Infrastructure.Repositories
             if (predicate != null)
                 query = query.Where(predicate);
 
+            if (orderby != null)
+                return await orderby(query).ToListAsync();
+
             return await query.ToListAsync();
         }
 
